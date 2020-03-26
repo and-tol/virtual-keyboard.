@@ -1,0 +1,33 @@
+{
+  "name": "virtual-keyboard",
+  "description": "![](https://i.imgur.com/MUYRlDL.png)",
+  "version": "1.0.0",
+  "main": "./src/script.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier-eslint '**/*.{js,ts,tsx}' --write",
+    "eslint": "./node_modules/.bin/eslint '**/*.{js,ts,tsx}'",
+    "eslint:fix": "npm run eslint -- --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/and-tol/virtual-keyboard..git"
+  },
+  "author": "Andrei Tolstoi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/and-tol/virtual-keyboard./issues"
+  },
+  "homepage": "https://github.com/and-tol/virtual-keyboard.#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "node-sass": "^4.13.1",
+    "prettier-eslint": "^9.0.1",
+    "prettier-eslint-cli": "^5.0.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
