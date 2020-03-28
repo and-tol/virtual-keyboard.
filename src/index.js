@@ -165,7 +165,7 @@ function insertSignToTextarea(target, dataKey) {
   specialSigns.forEach((sign) => {
     targetClick = sign.toLowerCase() === dataKey.toLowerCase() ? '' : targetClick;
   });
-  value += target;
+  value += targetClick;
   document.querySelector('#textarea').value = value;
 }
 
@@ -182,14 +182,13 @@ const mouseClickHandler = (event) => {
   let target = event.target.textContent.toLowerCase();
   const targetElement = event.target;
   const dataKey = targetElement.dataset.key;
+  console.log('target', target);
 
   // -- Space -- //
-  target = target === 'space' ? ' ' : target;
+  target = dataKey === 'space' ? ' ' : target;
 
   // Shift
   if (dataKey === 'Shift') {
-    console.log('capslock', capslock);
-
     shift = !shift;
     keyboard.remove();
     keyboard = keyboardTemplate();
@@ -209,7 +208,7 @@ const mouseClickHandler = (event) => {
   // ------------ //
 
   // -- Capslock -- //
-  if (target === 'capslock') {
+  if (dataKey === 'CapsLock') {
     capslock = !capslock;
     targetElement.classList.toggle('active');
   }
@@ -234,7 +233,6 @@ const mouseClickHandler = (event) => {
 
 // -- Events
 body.addEventListener('click', mouseClickHandler);
-console.log('keyboard', keyboard);
 
 {
   // onkeypress -> charCode, code;
