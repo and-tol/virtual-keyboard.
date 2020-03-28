@@ -1,17 +1,5 @@
 console.log('Hello!');
 
-//
-// const isKeyPressed = (event) => {
-//   ['Shift', '.', ',', 'Alt', 'AltGraph', 'ё', 'Ё', '\\', '/'].includes(event.key);
-// };
-
-let capslock = false;
-let shift = false;
-const lang = 'eng';
-const engAbc = 'abcdefghijklmnopqrstuvwxyz';
-const rusAbc = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
-
-const simbolsCapsLockRus = 'Ё!"№;%:?/,';
 // -- Buttons
 const rowEngBtns = {
   Eng1Btns: ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '=', 'Backspace'],
@@ -55,6 +43,11 @@ const specialSigns = [
   'CtrlRight',
 ];
 
+let capslock = false;
+let shift = false;
+let alt = false;
+const lang = 'eng';
+
 const body = document.querySelector('body');
 
 // === create keyboard elements === //
@@ -94,25 +87,16 @@ let keyboard = keyboardTemplate();
 
 container.append(keyboard);
 
-// -- Rows
-/**
- * Function create row of keyboard
- * @param {String} id - id
- */
-function rowTemplate(id) {
-  const div = document.createElement('div');
-  div.classList.add('row');
-  div.setAttribute('id', `${id}`);
-  return div;
-}
-
+// -- Rows -- //
 /**
  * Function create row of keyboard
  * @param {String} row - name of keyboard row
  * @param {Array} btns - signs of keyboard buttons
  */
-function renderRow(row, btns) {
-  const lineRow = rowTemplate(row);
+function renderRow(btns) {
+  // + create row
+  const lineRow = document.createElement('div');
+  lineRow.classList.add('row');
 
   btns.map((sign) => {
     // + create buttons
@@ -143,13 +127,11 @@ function renderRow(row, btns) {
   return lineRow;
 }
 
-// function renderKeyboard(obj) {
-//   for (const key in obj) {
-//     const btns = obj[key];
-//     const row = renderRow(key, btns);
-//     keyboard.append(row);
-//   }
-// }
+/**
+ * Function that renders a keyboard based on the position of the Shift and the language
+ * @param {boolean} key
+ * @param {string} language
+ */
 function renderKeyboard(key, language) {
   let obj = {};
 
@@ -167,15 +149,34 @@ function renderKeyboard(key, language) {
 
   for (const key in obj) {
     const btns = obj[key];
-    const row = renderRow(key, btns);
+    const row = renderRow(btns);
     keyboard.append(row);
   }
+}
+
+/**
+ * Function that adds characters typed on the virtual keyboard with the mouse
+ * @param {string} target
+ * @param {string} dataKey
+ */
+function insertSignToTextarea(target, dataKey) {
+  let targetClick = target;
+
+  specialSigns.forEach((sign) => {
+    targetClick = sign.toLowerCase() === dataKey.toLowerCase() ? '' : targetClick;
+  });
+  value += target;
+  document.querySelector('#textarea').value = value;
 }
 
 // Init English keyboard
 renderKeyboard(shift, 'eng');
 
 // Handlers
+/**
+ * Function handles clicks on the virtual keyboard.
+ * @param {MouseEvent} event
+ */
 const mouseClickHandler = (event) => {
   // get buttons value
   let target = event.target.textContent.toLowerCase();
@@ -205,29 +206,30 @@ const mouseClickHandler = (event) => {
       document.querySelector('[data-key=CapsLock]').classList.add('active');
     }
   }
+  // ------------ //
 
   // -- Capslock -- //
   if (target === 'capslock') {
     capslock = !capslock;
     targetElement.classList.toggle('active');
   }
-  // set signs to textarea -> TRUE
+
+  // Set signs to Textarea -> TRUE
   if (capslock) {
     // get buttons value
     target = event.target.textContent;
-    specialSigns.forEach((sign) => {
-      target = sign.toLowerCase() === target.toLowerCase() ? '' : target;
-    });
-    value += target;
-    document.querySelector('#textarea').value = value;
+
+    insertSignToTextarea(target, dataKey);
   } else {
-    specialSigns.forEach((sign) => {
-      target = sign.toLowerCase() === target.toLowerCase() ? '' : target;
-    });
-    value += target;
-    document.querySelector('#textarea').value = value;
+    insertSignToTextarea(target, dataKey);
   }
   // --------- //
+
+  // -- Alt -- //
+  if (dataKey === 'Alt') {
+    alt = !alt;
+    document.querySelector('[data-key=Alt]').classList.toggle('active');
+  }
 };
 
 // -- Events
@@ -236,7 +238,7 @@ console.log('keyboard', keyboard);
 
 {
   // onkeypress -> charCode, code;
-  const keyboardA = [];
+  // const keyboardA = [];
   // document.onkeypress = function (event) {
   //   keyboardA.push(event.charCode);
   //   console.log('keyboardA', keyboardA);
