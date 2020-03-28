@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  color: #546e7a;
 }
 
 .active, .btn:hover, .btn {
@@ -14,13 +15,13 @@
 
 .textarea {
   width: 100%;
-  border: 1px solid grey;
+  border: 1px solid #546e7a;
   height: 260px;
 }
 
 .keyboard {
   width: 100%;
-  border: 1px solid grey;
+  border: 1px solid #546e7a;
 }
 
 .row {
@@ -35,7 +36,6 @@
   width: 46px;
   height: 46px;
   border: solid 1px #546e7a;
-  color: #546e7a;
   justify-content: center;
   align-items: center;
   background-color: #cfd8dc;
