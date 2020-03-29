@@ -218,6 +218,9 @@ const mouseClickHandler = (event) => {
     // get buttons value
     target = event.target.textContent;
 
+    // -- Space -- //
+    target = dataKey === 'space' ? ' ' : target;
+
     insertSignToTextarea(target, dataKey);
   } else {
     insertSignToTextarea(target, dataKey);
