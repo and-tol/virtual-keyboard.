@@ -53,18 +53,17 @@ let value = '';
 const body = document.querySelector('body');
 
 // === create keyboard elements === //
-// -- Container
+// -- Container -- //
 const container = document.createElement('div');
 container.setAttribute('id', 'container');
 container.classList.add('container');
 
 body.prepend(container);
 
-// -- Textarea
-
+// -- Textarea -- //
 /**
  * Function render textarea
- * @param {string} val
+ * @param {string} val - Value signs in textarea
  */
 function renderTextarea(val) {
   const textarea = document.createElement('textarea');
@@ -84,9 +83,7 @@ const keyboardTemplate = () => {
   keyboard.classList.add('keyboard');
   return keyboard;
 };
-
 let keyboard = keyboardTemplate();
-
 container.append(keyboard);
 
 // -- Rows -- //
@@ -195,7 +192,7 @@ function insertSignToTextarea(targetValue, dataKey) {
  * @param {string} language - keyboard language
  */
 function toggleLanguage(shiftKey, language) {
-  document.querySelector('[data-key=Win]').classList.toggle('active');
+  // document.querySelector('[data-key=Win]').classList.toggle('active');
   keyboard.remove();
   keyboard = keyboardTemplate();
   renderKeyboard(shiftKey, language);
@@ -233,14 +230,13 @@ const mouseClickHandler = (event) => {
   const targetElement = event.target;
   const dataKey = targetElement.dataset.key;
   const row = targetElement.classList.contains('row');
+  if (row) {
+    target = '';
+  }
 
   // Buttons animation
   if (dataKey !== 'CapsLock') {
     clickingButton(targetElement);
-  }
-
-  if (row) {
-    target = '';
   }
 
   // -- Space -- //
@@ -267,7 +263,6 @@ const mouseClickHandler = (event) => {
       document.querySelector('[data-key=Alt]').classList.add('active');
     }
   }
-  // ------------ //
 
   // -- Capslock -- //
   if (dataKey === 'CapsLock') {
@@ -283,7 +278,8 @@ const mouseClickHandler = (event) => {
 
   // Toggle language rus-eng
   if (dataKey === 'Win') {
-    document.querySelector('[data-key=Win]').classList.toggle('active');
+    document.querySelector('[data-key=Win]').classList.add('active');
+    console.log('win');
   }
   const win = document.querySelector('.active[data-key=Win]');
   if (win && dataKey === 'space') {
