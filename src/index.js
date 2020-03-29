@@ -100,8 +100,8 @@ function renderRow(btns) {
   const lineRow = document.createElement('div');
   lineRow.classList.add('row');
 
+  // + create buttons
   btns.map((sign) => {
-    // + create buttons
     const div = document.createElement('div');
     div.classList.add('btn');
     div.textContent = sign;
@@ -170,6 +170,11 @@ function renderKeyboard(key, language) {
 function insertSignToTextarea(targetValue, dataKey) {
   let targetClick = targetValue;
 
+  // -- Backspace -- //
+  if (dataKey === 'Backspace') {
+    value = value.slice(0, value.length - 1);
+  }
+
   specialSigns.forEach((sign) => {
     if (sign === undefined || dataKey === undefined) {
       return;
@@ -180,6 +185,8 @@ function insertSignToTextarea(targetValue, dataKey) {
 
   value += targetClick;
   document.querySelector('#textarea').value = value;
+
+  renderTextarea(value);
 }
 
 /**
@@ -199,10 +206,14 @@ function toggleLanguage(shiftKey, language) {
   }
 }
 
+/**
+ * Function animates button presses
+ * @param {Element} elem - Markup element
+ */
 function clickingButton(elem) {
   elem.classList.add('active');
 
-  const timeoutID = setTimeout(() => {
+  setTimeout(() => {
     elem.classList.remove('active');
   }, 300);
 }
@@ -222,9 +233,9 @@ const mouseClickHandler = (event) => {
   const targetElement = event.target;
   const dataKey = targetElement.dataset.key;
   const row = targetElement.classList.contains('row');
-  // Buttons animation
 
-  if (dataKey !== 'CapsLock' || dataKey !== 'Alt') {
+  // Buttons animation
+  if (dataKey !== 'CapsLock') {
     clickingButton(targetElement);
   }
 
@@ -232,9 +243,6 @@ const mouseClickHandler = (event) => {
     target = '';
   }
 
-  // -- Tab -- //
-  // target = dataKey === 'Tab' ? '11' : target;
-  // console.log('target', target);
   // -- Space -- //
   target = dataKey === 'space' ? ' ' : target;
 
@@ -277,9 +285,7 @@ const mouseClickHandler = (event) => {
   if (dataKey === 'Win') {
     document.querySelector('[data-key=Win]').classList.toggle('active');
   }
-
   const win = document.querySelector('.active[data-key=Win]');
-
   if (win && dataKey === 'space') {
     switch (true) {
       case lang === 'eng':
@@ -299,36 +305,25 @@ const mouseClickHandler = (event) => {
     }
   }
 
-  // -- Backspace -- //
-  const textareaValue = document.querySelector('#textarea').value;
-  if (dataKey === 'Backspace') {
-    target = textareaValue.slice(0, textareaValue.length - 1);
-    console.log('textareaValue', target);
-  }
-
   // Set signs to Textarea -> TRUE
   if (capslock) {
     // get buttons value
-    target = event.target.textContent;
+    target = target.toUpperCase();
 
     // -- Space -- //
     target = dataKey === 'space' ? ' ' : target;
 
     insertSignToTextarea(target, dataKey);
   } else {
+    const textareaOld = document.querySelector('#textarea');
+    textareaOld.remove();
+
+    const textareaNew = renderTextarea(value);
+    container.prepend(textareaNew);
+
     insertSignToTextarea(target, dataKey);
   }
   // --------- //
 };
 // -- Events
 body.addEventListener('click', mouseClickHandler);
-
-{
-  // onkeypress -> charCode, code;
-  // const keyboardA = [];
-  // document.onkeypress = function (event) {
-  //   keyboardA.push(event.charCode);
-  //   console.log('keyboardA', keyboardA);
-  // };
-  // String.fromCharCode(keyboardA[i]);
-}
