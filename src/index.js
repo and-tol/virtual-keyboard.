@@ -176,6 +176,8 @@ function insertSignToTextarea(targetValue, dataKey) {
     }
     targetClick = sign.toLowerCase() === dataKey.toLowerCase() ? '' : targetClick;
   });
+  targetClick = dataKey.toLowerCase() === 'tab' ? '    ' : targetClick;
+
   value += targetClick;
   document.querySelector('#textarea').value = value;
 }
@@ -220,7 +222,6 @@ const mouseClickHandler = (event) => {
   const targetElement = event.target;
   const dataKey = targetElement.dataset.key;
   const row = targetElement.classList.contains('row');
-
   // Buttons animation
 
   if (dataKey !== 'CapsLock' || dataKey !== 'Alt') {
@@ -231,6 +232,9 @@ const mouseClickHandler = (event) => {
     target = '';
   }
 
+  // -- Tab -- //
+  // target = dataKey === 'Tab' ? '11' : target;
+  // console.log('target', target);
   // -- Space -- //
   target = dataKey === 'space' ? ' ' : target;
 
