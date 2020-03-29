@@ -6,27 +6,28 @@ const rowEngBtns = {
   Eng2Btns: ['Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']'],
   Eng3Btns: ['CapsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'", '\\'],
   Eng4Btns: ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', 'Shift'],
-  Eng5Btns: ['CtrlLeft', 'Alt', 'space', 'Alt Gr', 'CtrlRight'],
+  Eng5Btns: ['CtrlLeft', 'Win', 'Alt', 'space', 'Alt Gr', 'CtrlRight'],
 };
 const rowEngBtnsShift = {
   Eng1Btns: ['~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'Backspace'],
   Eng2Btns: ['Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']'],
   Eng3Btns: ['CapsLock', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '|'],
   Eng4Btns: ['Shift', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 'Shift'],
-  Eng5Btns: ['CtrlLeft', 'Alt', 'space', 'Alt Gr', 'CtrlRight'],
+  Eng5Btns: ['CtrlLeft', 'Win', 'Alt', 'space', 'Alt Gr', 'CtrlRight'],
 };
-const rowEngBtns2 = {
-  Eng1Btns: [96, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 45, 61, 'Backspace'],
-  Eng2Btns: ['Tab', 113, 119, 101, 114, 116, 121, 117, 105, 111, 112, 91, 93, 'Enter'],
-  Eng3Btns: ['CapsLock', 65, 83, 68, 70, 71, 72, 74, 75, 76, 59, 39, 92, ''],
-  Eng4Btns: ['Shift', 92, 90, 88, 67, 86, 66, 78, 77, 44, 46, 47, 'Shift'],
-  Eng5Btns: ['Ctr', 'Win', 'Alt', 'space', 'Alt', 'Ctr'],
-};
+
 const rowRusBtns = {
   Rus1: ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '=', 'Backspace'],
-  Rus2: ['Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', 'Enter'],
-  Rus3: ['CapsLock', 'Ф', ' Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', '\\', 'Enter'],
-  Rus4: ['Shift', '\\', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', '.', 'Shift'],
+  Rus2: ['Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
+  Rus3: ['CapsLock', 'Ф', ' Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', '\\'],
+  Rus4: ['Shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', '.', 'Shift'],
+  Rus5: ['Ctr', 'Win', 'Alt', 'space', 'Alt', 'Ctr'],
+};
+const rowRusBtnsShift = {
+  Rus1: ['~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'Backspace'],
+  Rus2: ['Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
+  Rus3: ['CapsLock', 'Ф', ' Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', '\\'],
+  Rus4: ['Shift', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', '.', 'Shift'],
   Rus5: ['Ctr', 'Win', 'Alt', 'space', 'Alt', 'Ctr'],
 };
 
@@ -46,7 +47,8 @@ const specialSigns = [
 let capslock = false;
 let shift = false;
 let alt = false;
-const lang = 'eng';
+let lang = 'eng';
+let value = '';
 
 const body = document.querySelector('body');
 
@@ -59,7 +61,7 @@ container.classList.add('container');
 body.prepend(container);
 
 // -- Textarea
-let value = '';
+
 /**
  * Function render textarea
  * @param {string} val
@@ -142,6 +144,12 @@ function renderKeyboard(key, language) {
     case key === true && language === 'eng':
       obj = rowEngBtnsShift;
       break;
+    case key === false && language === 'rus':
+      obj = rowRusBtns;
+      break;
+    case key === true && language === 'rus':
+      obj = rowRusBtnsShift;
+      break;
 
     default:
       break;
@@ -156,17 +164,45 @@ function renderKeyboard(key, language) {
 
 /**
  * Function that adds characters typed on the virtual keyboard with the mouse
- * @param {string} target
+ * @param {string} targetValue
  * @param {string} dataKey
  */
-function insertSignToTextarea(target, dataKey) {
-  let targetClick = target;
+function insertSignToTextarea(targetValue, dataKey) {
+  let targetClick = targetValue;
 
   specialSigns.forEach((sign) => {
+    if (sign === undefined || dataKey === undefined) {
+      return;
+    }
     targetClick = sign.toLowerCase() === dataKey.toLowerCase() ? '' : targetClick;
   });
   value += targetClick;
   document.querySelector('#textarea').value = value;
+}
+
+/**
+ * The function switches the keyboard language keeping position caps lock
+ * @param {boolean} shiftKey - shift position
+ * @param {string} language - keyboard language
+ */
+function toggleLanguage(shiftKey, language) {
+  document.querySelector('[data-key=Win]').classList.toggle('active');
+  keyboard.remove();
+  keyboard = keyboardTemplate();
+  renderKeyboard(shiftKey, language);
+  container.append(keyboard);
+
+  if (capslock) {
+    document.querySelector('[data-key=CapsLock]').classList.add('active');
+  }
+}
+
+function clickingButton(elem) {
+  elem.classList.add('active');
+
+  const timeoutID = setTimeout(() => {
+    elem.classList.remove('active');
+  }, 300);
 }
 
 // Init English keyboard
@@ -179,10 +215,21 @@ renderKeyboard(shift, 'eng');
  */
 const mouseClickHandler = (event) => {
   // get buttons value
-  let target = event.target.textContent.toLowerCase();
+  let target = '';
+  target = event.target.textContent.toLowerCase();
   const targetElement = event.target;
   const dataKey = targetElement.dataset.key;
-  console.log('target', target);
+  const row = targetElement.classList.contains('row');
+
+  // Buttons animation
+
+  if (dataKey !== 'CapsLock' || dataKey !== 'Alt') {
+    clickingButton(targetElement);
+  }
+
+  if (row) {
+    target = '';
+  }
 
   // -- Space -- //
   target = dataKey === 'space' ? ' ' : target;
@@ -204,6 +251,9 @@ const mouseClickHandler = (event) => {
     if (capslock) {
       document.querySelector('[data-key=CapsLock]').classList.add('active');
     }
+    if (alt) {
+      document.querySelector('[data-key=Alt]').classList.add('active');
+    }
   }
   // ------------ //
 
@@ -211,6 +261,45 @@ const mouseClickHandler = (event) => {
   if (dataKey === 'CapsLock') {
     capslock = !capslock;
     targetElement.classList.toggle('active');
+  }
+
+  // -- Alt -- //
+  if (dataKey === 'Alt') {
+    alt = !alt;
+    document.querySelector('[data-key=Alt]').classList.toggle('active');
+  }
+
+  // Toggle language rus-eng
+  if (dataKey === 'Win') {
+    document.querySelector('[data-key=Win]').classList.toggle('active');
+  }
+
+  const win = document.querySelector('.active[data-key=Win]');
+
+  if (win && dataKey === 'space') {
+    switch (true) {
+      case lang === 'eng':
+        lang = 'rus';
+        toggleLanguage(shift, lang);
+        target = '';
+        break;
+
+      case lang === 'rus':
+        lang = 'eng';
+        toggleLanguage(shift, lang);
+        target = '';
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  // -- Backspace -- //
+  const textareaValue = document.querySelector('#textarea').value;
+  if (dataKey === 'Backspace') {
+    target = textareaValue.slice(0, textareaValue.length - 1);
+    console.log('textareaValue', target);
   }
 
   // Set signs to Textarea -> TRUE
@@ -226,14 +315,7 @@ const mouseClickHandler = (event) => {
     insertSignToTextarea(target, dataKey);
   }
   // --------- //
-
-  // -- Alt -- //
-  if (dataKey === 'Alt') {
-    alt = !alt;
-    document.querySelector('[data-key=Alt]').classList.toggle('active');
-  }
 };
-
 // -- Events
 body.addEventListener('click', mouseClickHandler);
 
