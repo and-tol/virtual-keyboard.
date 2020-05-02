@@ -1,4 +1,4 @@
-import container from './views/container';
+import {container, wrapper} from './views/container';
 import clickingButton from './modules/clickingButton';
 import renderTextarea from './views/renderTextarea';
 import keyboardTemplate from './views/keyboardTemplate';
@@ -7,13 +7,18 @@ import toggleLanguage from './modules/toggleLanguage';
 import insertSignToTextarea from './modules/insertSignToTextarea';
 import keyboardConfig from './config/keyboard.config';
 import getCurrentLang from './helpers/getCurrentLang';
-import { focusTextarea, blurTextarea } from './helpers/focus';
+import { focusTextarea, blurTextarea } from './helpers/focusTexarea';
+import setCapsLock from './modules/setCapsLock';
+import reRenderKeyboard from './modules/reRenderKeyboard';
+import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
+import capslockIndicator from './modules/capslockIndicator';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
 console.log('Hello!');
 
 const body = document.querySelector('body');
-body.prepend(container);
+body.prepend(wrapper);
+wrapper.prepend(container);
 
 // -- Init Textarea -- //
 let textarea = renderTextarea(keyboardConfig.value);
@@ -22,12 +27,16 @@ container.append(textarea);
 // -- Init Keyboard -- //
 let keyboard = keyboardTemplate();
 container.append(keyboard);
+// container.insertAdjacentHTML('beforeend', capslockIndicatorTemplate);
+capslockIndicator(keyboardConfig.capslock, wrapper);
 
-if (!localStorage.getItem('codeLang')) {
+// -- ? Init Keyboard lang from localstorage
+// if (!localStorage.getItem('codeLang')) {
+if (localStorage.getItem('codeLang') === null) {
   // Init English keyboard
   localStorage.setItem('codeLang', '0');
 }
-const lang = Number(localStorage.getItem('codeLang'));
+let lang = Number(localStorage.getItem('codeLang'));
 
 renderKeyboard(keyboardConfig.shift, lang, keyboard, keyboardConfig.capslock);
 
@@ -41,6 +50,8 @@ const mouseClickHandler = (event) => {
   // const winClick = document.querySelector('[data-click=Win]').dataset.click;
   blurTextarea();
   const textareaValue = textarea.value;
+  // set language to keyboard from local storage
+  lang = Number(localStorage.getItem('codeLang'));
   // get buttons value
   let target = event.target.dataset.key;
   const targetElement = event.target;
@@ -60,8 +71,11 @@ const mouseClickHandler = (event) => {
 
   // *-- Shift --* //
   if (dataKey === 'Shift') {
-    kb.shift = !kb.shift;
-    currentLang = getCurrentLang();
+    keyboardConfig.shift = !keyboardConfig.shift;
+    // currentLang = getCurrentLang();
+    if (lang !== currentLang) {
+      currentLang = lang;
+    }
 
     setTimeout(() => {
       keyboard.remove();
@@ -75,7 +89,11 @@ const mouseClickHandler = (event) => {
   if (dataKey === 'CapsLock') {
     setTimeout(() => {
       keyboardConfig.capslock = !keyboardConfig.capslock;
-      currentLang = getCurrentLang();
+      // currentLang = getCurrentLang();
+      if (lang !== currentLang) {
+        currentLang = lang;
+      }
+      // localStorage.setItem('codeLang', '1');
 
       keyboard.remove();
       keyboard = keyboardTemplate();
@@ -118,7 +136,6 @@ const mouseClickHandler = (event) => {
     textarea = renderTextarea(textareaValue);
     container.prepend(textarea);
 
-    console.log('target', target);
     insertSignToTextarea(target, dataKey, textareaValue);
   }
 };
@@ -133,9 +150,55 @@ document.addEventListener('DOMContentLoaded', () => {
   // });
   body.addEventListener('click', focusTextarea);
 
-  // ловим событие клавиши "keyup" ->"CapsLock"
+  // установить CapsLock с физической клавиатуры
   body.addEventListener('keyup', (event) => {
-    const keyboardEnabled = event.getModifierState('CapsLock');
-    keyboardConfig.capslock = keyboardEnabled;
+    setCapsLock(event, keyboardConfig);
   });
+
+  // определяем язык, устанавливаем язык в config
+  const setLanguageToConfig = (event) => {
+    // localStorage.setItem('codeLang', currentLang.toString(10));
+    lang = Number(localStorage.getItem('codeLang'));
+
+    //  определяем русский язык
+    if (/^[а-яА-Я]+$/.test(event.key)) {
+      keyboardConfig.currentLang = 'rus';
+      localStorage.setItem('codeLang', '1');
+
+      reRenderKeyboard(keyboard, 1);
+    } else {
+      keyboardConfig.currentLang = 'eng';
+      localStorage.setItem('codeLang', '0');
+
+      reRenderKeyboard(keyboard, 0);
+    }
+  };
+
+  body.addEventListener('keyup', (event) => {
+    // localStorage.setItem('codeLang', currentLang.toString(10));
+    lang = Number(localStorage.getItem('codeLang'));
+
+    //  определяем русский язык
+    if (/^[а-яА-Я]+$/.test(event.key)) {
+      keyboardConfig.currentLang = 'rus';
+      localStorage.setItem('codeLang', '1');
+
+      keyboard.remove();
+      keyboard = keyboardTemplate();
+      renderKeyboard(keyboardConfig.shift, 1, keyboard, keyboardConfig.capslock);
+      container.append(keyboard);
+    } else {
+      keyboardConfig.currentLang = 'eng';
+      localStorage.setItem('codeLang', '0');
+
+      keyboard.remove();
+      keyboard = keyboardTemplate();
+      renderKeyboard(keyboardConfig.shift, 0, keyboard, keyboardConfig.capslock);
+      container.append(keyboard);
+    }
+  });
+
+  // считывание позиции курсора
+  const getCursorPosition = () => {};
+  body.addEventListener('click', getCursorPosition);
 });

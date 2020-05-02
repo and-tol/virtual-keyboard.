@@ -1,4 +1,4 @@
-import { blurTextarea } from '../helpers/focus';
+import { blurTextarea } from '../helpers/focusArea';
 import getCurrentLang from '../helpers/getCurrentLang';
 import clickingButton from './clickingButton';
 import toggleLanguage from './toggleLanguage';
@@ -75,6 +75,7 @@ const mouseClickHandler = (event, txtarea, keyb, container) => {
     }, 5000);
   }
 
+  // переключение раскладки клавиатуры
   const winClick = document.querySelector('[data-key=Win]').dataset.click;
 
   if (winClick && dataKey === 'space') {

@@ -5,6 +5,7 @@ const keyboardConfig = {
   value: '',
   lang: [0, 1],
   specBtnTimeout: 550,
+  currentLang: 'eng',
 };
 
 // language
