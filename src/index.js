@@ -1,4 +1,4 @@
-import {container, wrapper} from './views/container';
+import { container, wrapper } from './views/container';
 import clickingButton from './modules/clickingButton';
 import renderTextarea from './views/renderTextarea';
 import keyboardTemplate from './views/keyboardTemplate';
@@ -12,6 +12,7 @@ import setCapsLock from './modules/setCapsLock';
 import reRenderKeyboard from './modules/reRenderKeyboard';
 import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
 import capslockIndicator from './modules/capslockIndicator';
+import { onCapsLockIndicator } from './modules/toggleCapsLockIndicator';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
 console.log('Hello!');
@@ -20,17 +21,20 @@ const body = document.querySelector('body');
 body.prepend(wrapper);
 wrapper.prepend(container);
 
-// -- Init Textarea -- //
+// *-- Init Textarea -- //
 let textarea = renderTextarea(keyboardConfig.value);
 container.append(textarea);
 
-// -- Init Keyboard -- //
+// *-- Init Keyboard -- //
 let keyboard = keyboardTemplate();
 container.append(keyboard);
-// container.insertAdjacentHTML('beforeend', capslockIndicatorTemplate);
-capslockIndicator(keyboardConfig.capslock, wrapper);
+// -- Init Keyboard Indicator -- //
+wrapper.insertAdjacentHTML('beforeend', capslockIndicatorTemplate);
+// if (keyboardConfig.capslock === true) {
+//   onCapsLockIndicator();
+// }
 
-// -- ? Init Keyboard lang from localstorage
+// *-- ? Init Keyboard lang from localstorage
 // if (!localStorage.getItem('codeLang')) {
 if (localStorage.getItem('codeLang') === null) {
   // Init English keyboard
@@ -40,7 +44,7 @@ let lang = Number(localStorage.getItem('codeLang'));
 
 renderKeyboard(keyboardConfig.shift, lang, keyboard, keyboardConfig.capslock);
 
-// Handlers
+// * Handlers
 /**
  * Function handles clicks on the virtual keyboard.
  * @param {MouseEvent} event
@@ -58,6 +62,8 @@ const mouseClickHandler = (event) => {
   const dataKey = targetElement.dataset.key;
   const row = targetElement.classList.contains('row');
   let currentLang = getCurrentLang();
+  const indicatorCL = document.querySelector('#capslock-light');
+  console.log('indicatorCL', indicatorCL);
   if (row) {
     target = '';
   }
@@ -100,6 +106,10 @@ const mouseClickHandler = (event) => {
       renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
       container.append(keyboard);
     }, keyboardConfig.specBtnTimeout);
+    if (keyboardConfig.capslock === true) {
+      console.log('test');
+      onCapsLockIndicator();
+    }
   }
 
   // * Toggle language rus-eng * //
@@ -127,6 +137,11 @@ const mouseClickHandler = (event) => {
       renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
       container.append(keyboard);
     }, keyboardConfig.specBtnTimeout);
+
+    if (keyboardConfig.capslock === true) {
+      console.log('test');
+      onCapsLockIndicator();
+    }
   }
 
   // * Set signs to Textarea

@@ -1,6 +1,6 @@
 import keyboardTemplate from '../views/keyboardTemplate';
 import keyboardConfig from '../config/keyboard.config';
-import container from '../views/container';
+// import {container} from '../views/container';
 import renderKeyboard from './renderKeyboard';
 
 /**
