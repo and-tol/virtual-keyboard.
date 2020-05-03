@@ -11,8 +11,7 @@ import { focusTextarea, blurTextarea } from './helpers/focusTexarea';
 import setCapsLock from './modules/setCapsLock';
 import reRenderKeyboard from './modules/reRenderKeyboard';
 import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
-import capslockIndicator from './modules/capslockIndicator';
-import { onCapsLockIndicator } from './modules/toggleCapsLockIndicator';
+import { onCapsLockIndicator, ofCapsLockIndicator } from './modules/toggleCapsLockIndicator';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
 console.log('Hello!');
@@ -105,42 +104,39 @@ const mouseClickHandler = (event) => {
       keyboard = keyboardTemplate();
       renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
       container.append(keyboard);
+      console.log('keyboardConfig.capslock);', keyboardConfig.capslock);
+      if (keyboardConfig.capslock === true) {
+        onCapsLockIndicator();
+      } else {
+        ofCapsLockIndicator();
+      }
     }, keyboardConfig.specBtnTimeout);
-    if (keyboardConfig.capslock === true) {
-      console.log('test');
-      onCapsLockIndicator();
+
+    // * Toggle language rus-eng * //
+    if (dataKey === 'Win') {
+      document.querySelector('[data-key=Win]').dataset.click = true;
+      // const winClick = document.querySelector('[data-click=true]').dataset.click;
+
+      setTimeout(() => {
+        // document.querySelector('[data-key=Win]').removeAttribute('data-click');
+        // delete document.querySelector('[data-key=Win]').dataset.click;
+        document.querySelector('[data-key=Win]').dataset.click = false;
+      }, 5000);
     }
-  }
 
-  // * Toggle language rus-eng * //
-  if (dataKey === 'Win') {
-    document.querySelector('[data-key=Win]').dataset.click = true;
-    // const winClick = document.querySelector('[data-click=true]').dataset.click;
+    const winClick = document.querySelector('[data-key=Win]').dataset.click;
 
-    setTimeout(() => {
-      // document.querySelector('[data-key=Win]').removeAttribute('data-click');
-      // delete document.querySelector('[data-key=Win]').dataset.click;
-      document.querySelector('[data-key=Win]').dataset.click = false;
-    }, 5000);
-  }
+    if (winClick && dataKey === 'space') {
+      setTimeout(() => {
+        toggleLanguage(currentLang, keyboardConfig.lang.length);
+        currentLang = getCurrentLang();
+        localStorage.setItem('codeLang', currentLang.toString(10));
 
-  const winClick = document.querySelector('[data-key=Win]').dataset.click;
-
-  if (winClick && dataKey === 'space') {
-    setTimeout(() => {
-      toggleLanguage(currentLang, keyboardConfig.lang.length);
-      currentLang = getCurrentLang();
-      localStorage.setItem('codeLang', currentLang.toString(10));
-
-      keyboard.remove();
-      keyboard = keyboardTemplate();
-      renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
-      container.append(keyboard);
-    }, keyboardConfig.specBtnTimeout);
-
-    if (keyboardConfig.capslock === true) {
-      console.log('test');
-      onCapsLockIndicator();
+        keyboard.remove();
+        keyboard = keyboardTemplate();
+        renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
+        container.append(keyboard);
+      }, keyboardConfig.specBtnTimeout);
     }
   }
 

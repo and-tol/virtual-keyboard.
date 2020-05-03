@@ -1,13 +1,8 @@
-const getCapslockIndicator = () => {
-  console.log('get');
-  return document.querySelector('capslock-indicator');
-};
+const getCapslockIndicator = () => document.querySelector('#capslock-light');
 
 export const onCapsLockIndicator = () => {
-  console.log('ligth', getCapslockIndicator());
   getCapslockIndicator().classList.add('light');
 };
 export const ofCapsLockIndicator = () => {
-  const capslockIndicator = getCapslockIndicator();
-  capslockIndicator.classList.remove('light');
+  getCapslockIndicator().classList.remove('light');
 };
