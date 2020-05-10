@@ -62,7 +62,7 @@ const mouseClickHandler = (event) => {
   const row = targetElement.classList.contains('row');
   let currentLang = getCurrentLang();
   const indicatorCL = document.querySelector('#capslock-light');
-  console.log('indicatorCL', indicatorCL);
+
   if (row) {
     target = '';
   }
@@ -104,7 +104,7 @@ const mouseClickHandler = (event) => {
       keyboard = keyboardTemplate();
       renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
       container.append(keyboard);
-      console.log('keyboardConfig.capslock);', keyboardConfig.capslock);
+
       if (keyboardConfig.capslock === true) {
         onCapsLockIndicator();
       } else {

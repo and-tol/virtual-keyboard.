@@ -20,7 +20,7 @@ const rowEngBtnsShift = {
   Eng1: ['~', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'Backspace'],
   Eng2: ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '{', '}', 'Del'],
   Eng3: ['CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '"', '|', 'Enter'],
-  Eng4: ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
+  Eng4: ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '<', '>', '?', 'Shift'],
   Eng5: row5,
 };
 const rowEngBtnsShiftCapslock = {
