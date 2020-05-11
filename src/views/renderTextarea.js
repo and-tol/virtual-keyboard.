@@ -6,8 +6,9 @@ export default function renderTextarea(value) {
   const textarea = document.createElement('textarea');
   textarea.setAttribute('id', 'textarea');
   textarea.setAttribute('value', value);
+  textarea.setAttribute('autofocus', 'true');
   textarea.classList.add('textarea');
-  textarea.focus();
+  // textarea.focus();
 
   return textarea;
 }

@@ -12,6 +12,7 @@ import setCapsLock from './modules/setCapsLock';
 import reRenderKeyboard from './modules/reRenderKeyboard';
 import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
 import { onCapsLockIndicator, ofCapsLockIndicator } from './modules/toggleCapsLockIndicator';
+import deleteSign from './modules/delete';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
 console.log('Hello!');
@@ -21,7 +22,8 @@ body.prepend(wrapper);
 wrapper.prepend(container);
 
 // *-- Init Textarea -- //
-let textarea = renderTextarea(keyboardConfig.value);
+// !
+let textarea = renderTextarea(keyboardConfig.textareaValue);
 container.append(textarea);
 
 // *-- Init Keyboard -- //
@@ -49,6 +51,7 @@ renderKeyboard(keyboardConfig.shift, lang, keyboard, keyboardConfig.capslock);
  * @param {MouseEvent} event
  */
 const mouseClickHandler = (event) => {
+  // set key Windows "false"
   document.querySelector('[data-key=Win]').dataset.click = false;
   // const winClick = document.querySelector('[data-click=Win]').dataset.click;
   blurTextarea();
@@ -149,6 +152,11 @@ const mouseClickHandler = (event) => {
 
     insertSignToTextarea(target, dataKey, textareaValue);
   }
+
+  // ! Delete signs from Textarea
+  // if (taget===) {
+
+  // }
 };
 
 // -- Events
@@ -161,10 +169,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // });
   body.addEventListener('click', focusTextarea);
 
-  // установить CapsLock с физической клавиатуры
+  // установливаем CapsLock с физической клавиатуры
   body.addEventListener('keyup', (event) => {
     setCapsLock(event, keyboardConfig);
   });
+
+  // TODO: удаление клавишей DEL на виртуальной клавиатуре
+  // body.addEventListener('keydown', deleteSign)
+
+
 
   // определяем язык, устанавливаем язык в config
   const setLanguageToConfig = (event) => {
@@ -209,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // считывание позиции курсора
+  // TODO: считывание позиции курсора
   const getCursorPosition = () => {};
   body.addEventListener('click', getCursorPosition);
 });

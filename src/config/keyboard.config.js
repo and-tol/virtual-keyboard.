@@ -2,7 +2,7 @@ const keyboardConfig = {
   capslock: false,
   shift: false,
   alt: false,
-  value: '',
+  textareaValue: '',
   lang: [0, 1],
   specBtnTimeout: 550,
   currentLang: 'eng',
