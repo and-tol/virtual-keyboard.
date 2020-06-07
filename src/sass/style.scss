@@ -74,7 +74,8 @@ html {
 }
 
 // * Caps Lock Indicator
-.capslock-indicator {
+.capslock-indicator,
+.language-indicator {
   font-size: 11px;
   margin-top: 8px;
   width: $width-keyboard;

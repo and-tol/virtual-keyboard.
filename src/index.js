@@ -13,6 +13,7 @@ import reRenderKeyboard from './modules/reRenderKeyboard';
 import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
 import { onCapsLockIndicator, ofCapsLockIndicator } from './modules/toggleCapsLockIndicator';
 import deleteSign from './modules/delete';
+import languageIndicatorTemplate from './views/languageIndicatorTemplate';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
 console.log('Hello!');
@@ -22,7 +23,6 @@ body.prepend(wrapper);
 wrapper.prepend(container);
 
 // *-- Init Textarea -- //
-// !
 let textarea = renderTextarea(keyboardConfig.textareaValue);
 container.append(textarea);
 
@@ -35,13 +35,14 @@ wrapper.insertAdjacentHTML('beforeend', capslockIndicatorTemplate);
 //   onCapsLockIndicator();
 // }
 
-// *-- ? Init Keyboard lang from localstorage
+// * Init Keyboard lang from localstorage
 // if (!localStorage.getItem('codeLang')) {
 if (localStorage.getItem('codeLang') === null) {
   // Init English keyboard
   localStorage.setItem('codeLang', '0');
 }
 let lang = Number(localStorage.getItem('codeLang'));
+wrapper.insertAdjacentHTML('beforeend', languageIndicatorTemplate(lang));
 
 renderKeyboard(keyboardConfig.shift, lang, keyboard, keyboardConfig.capslock);
 
@@ -54,7 +55,8 @@ const mouseClickHandler = (event) => {
   // set key Windows "false"
   document.querySelector('[data-key=Win]').dataset.click = false;
   // const winClick = document.querySelector('[data-click=Win]').dataset.click;
-  blurTextarea();
+  // blurTextarea();
+
   const textareaValue = textarea.value;
   // set language to keyboard from local storage
   lang = Number(localStorage.getItem('codeLang'));
@@ -114,34 +116,41 @@ const mouseClickHandler = (event) => {
         ofCapsLockIndicator();
       }
     }, keyboardConfig.specBtnTimeout);
-
-    // * Toggle language rus-eng * //
-    if (dataKey === 'Win') {
-      document.querySelector('[data-key=Win]').dataset.click = true;
-      // const winClick = document.querySelector('[data-click=true]').dataset.click;
-
-      setTimeout(() => {
-        // document.querySelector('[data-key=Win]').removeAttribute('data-click');
-        // delete document.querySelector('[data-key=Win]').dataset.click;
-        document.querySelector('[data-key=Win]').dataset.click = false;
-      }, 5000);
-    }
-
-    const winClick = document.querySelector('[data-key=Win]').dataset.click;
-
-    if (winClick && dataKey === 'space') {
-      setTimeout(() => {
-        toggleLanguage(currentLang, keyboardConfig.lang.length);
-        currentLang = getCurrentLang();
-        localStorage.setItem('codeLang', currentLang.toString(10));
-
-        keyboard.remove();
-        keyboard = keyboardTemplate();
-        renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
-        container.append(keyboard);
-      }, keyboardConfig.specBtnTimeout);
-    }
   }
+
+  // * Toggle language rus-eng * //
+  if (dataKey === 'Win') {
+    document.querySelector('[data-key=Win]').dataset.click = true;
+    // const winClick = document.querySelector('[data-click=true]').dataset.click;
+
+    setTimeout(() => {
+      // document.querySelector('[data-key=Win]').removeAttribute('data-click');
+      // delete document.querySelector('[data-key=Win]').dataset.click;
+      document.querySelector('[data-key=Win]').dataset.click = false;
+    }, 5000);
+  }
+
+  const winClick = document.querySelector('[data-key=Win]').dataset.click;
+
+  if (winClick && dataKey === 'space') {
+    setTimeout(() => {
+      toggleLanguage(currentLang, keyboardConfig.lang.length);
+      currentLang = getCurrentLang();
+      localStorage.setItem('codeLang', currentLang.toString(10));
+      console.log('currentLang', currentLang);
+      //  change keyboard language layout
+      keyboard.remove();
+      keyboard = keyboardTemplate();
+      renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
+      container.append(keyboard);
+
+      // change language indicator
+      const languageIndicator = document.querySelector('.language-indicator');
+      languageIndicator.remove();
+      wrapper.insertAdjacentHTML('beforeend', languageIndicatorTemplate(currentLang));
+    }, keyboardConfig.specBtnTimeout);
+  }
+  // *
 
   // * Set signs to Textarea
   if (target !== undefined) {
@@ -177,9 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // TODO: удаление клавишей DEL на виртуальной клавиатуре
   // body.addEventListener('keydown', deleteSign)
 
-
-
-  // определяем язык, устанавливаем язык в config
+  /**
+   * определяем язык, устанавливаем язык в config
+   */
   const setLanguageToConfig = (event) => {
     // localStorage.setItem('codeLang', currentLang.toString(10));
     lang = Number(localStorage.getItem('codeLang'));
