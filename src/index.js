@@ -14,7 +14,10 @@ import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
 import { onCapsLockIndicator, ofCapsLockIndicator } from './modules/toggleCapsLockIndicator';
 import deleteSign from './modules/delete';
 import languageIndicatorTemplate from './views/languageIndicatorTemplate';
+import getCaretPosition from './helpers/getCaretPosition';
 // import mouseClickHandler from './modules/mouseClickHandler';
+
+// import getCaretPosition from './helpers/getCaretPosition';
 
 console.log('Hello!');
 
@@ -178,34 +181,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // });
   body.addEventListener('click', focusTextarea);
 
-  // установливаем CapsLock с физической клавиатуры
+  // устанавливаем CapsLock с физической клавиатуры
   body.addEventListener('keyup', (event) => {
     setCapsLock(event, keyboardConfig);
   });
 
   // TODO: удаление клавишей DEL на виртуальной клавиатуре
   // body.addEventListener('keydown', deleteSign)
-
-  /**
-   * определяем язык, устанавливаем язык в config
-   */
-  const setLanguageToConfig = (event) => {
-    // localStorage.setItem('codeLang', currentLang.toString(10));
-    lang = Number(localStorage.getItem('codeLang'));
-
-    //  определяем русский язык
-    if (/^[а-яА-Я]+$/.test(event.key)) {
-      keyboardConfig.currentLang = 'rus';
-      localStorage.setItem('codeLang', '1');
-
-      reRenderKeyboard(keyboard, 1);
-    } else {
-      keyboardConfig.currentLang = 'eng';
-      localStorage.setItem('codeLang', '0');
-
-      reRenderKeyboard(keyboard, 0);
-    }
-  };
 
   body.addEventListener('keyup', (event) => {
     // localStorage.setItem('codeLang', currentLang.toString(10));
@@ -234,4 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // TODO: считывание позиции курсора
   const getCursorPosition = () => {};
   body.addEventListener('click', getCursorPosition);
+});
+
+
+
+// получаем позицию курсора в поле textarea
+document.addEventListener('click', (event) => {
+  let q = null;
+  if (event.target.getAttribute('id') === 'textarea') {
+    q = getCaretPosition(textarea);
+  }
+  return q;
 });

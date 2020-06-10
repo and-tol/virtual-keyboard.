@@ -4,7 +4,7 @@ import keyboardConfig from '../config/keyboard.config';
 import renderKeyboard from './renderKeyboard';
 
 /**
- *
+ * Перерендер виртуальной клавиатуры
  * @param {HTMLDivElement} kb - Virtual keyboard Node
  * @param {number} lg - Language of keyboard input
  */
