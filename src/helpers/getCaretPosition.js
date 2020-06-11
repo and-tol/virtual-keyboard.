@@ -1,6 +1,8 @@
 export default function getCaretPosition(obj) {
-  // фокус в текстареа
+  // фокус в textarea
   // obj.focus();
+
+  console.log('textarea', obj)
 
   // свойство Node-объекта input & textarea
   if (obj.selectionStart) {
@@ -27,4 +29,4 @@ function cleanForm() {
   setTimeout('cleanForm();', 100);
 }
 
-cleanForm();
+// cleanForm();

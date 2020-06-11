@@ -17,8 +17,6 @@ import languageIndicatorTemplate from './views/languageIndicatorTemplate';
 import getCaretPosition from './helpers/getCaretPosition';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
-// import getCaretPosition from './helpers/getCaretPosition';
-
 console.log('Hello!');
 
 const body = document.querySelector('body');
@@ -186,9 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setCapsLock(event, keyboardConfig);
   });
 
-  // TODO: удаление клавишей DEL на виртуальной клавиатуре
-  // body.addEventListener('keydown', deleteSign)
-
   body.addEventListener('keyup', (event) => {
     // localStorage.setItem('codeLang', currentLang.toString(10));
     lang = Number(localStorage.getItem('codeLang'));
@@ -213,18 +208,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // TODO: считывание позиции курсора
-  const getCursorPosition = () => {};
-  body.addEventListener('click', getCursorPosition);
-});
+  /**
+   * Позиция курсора в поле textarea
+   */
+  let cursorPosition = null;
+  // получаем позицию курсора в поле textarea
+  document.addEventListener('click', (event) => {
+    console.log('event', event);
+    if (event.target.getAttribute('id') === 'textarea') {
+      cursorPosition = getCaretPosition(textarea);
+    }
+  });
+  console.log('cursorPosition', cursorPosition);
 
-
-
-// получаем позицию курсора в поле textarea
-document.addEventListener('click', (event) => {
-  let q = null;
-  if (event.target.getAttribute('id') === 'textarea') {
-    q = getCaretPosition(textarea);
-  }
-  return q;
+  // TODO: удаление клавишей DEL на виртуальной клавиатуре
+  // body.addEventListener('keydown', deleteSign)
 });
