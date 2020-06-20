@@ -1,23 +1,33 @@
-import { container, wrapper } from './views/container';
+import { container, wrapper } from './UI/container';
 import clickingButton from './modules/clickingButton';
-import renderTextarea from './views/renderTextarea';
-import keyboardTemplate from './views/keyboardTemplate';
+import renderTextarea from './UI/renderTextarea';
+import keyboardTemplate from './UI/keyboardTemplate';
 import renderKeyboard from './modules/renderKeyboard';
 import toggleLanguage from './modules/toggleLanguage';
 import insertSignToTextarea from './modules/insertSignToTextarea';
-import keyboardConfig from './config/keyboard.config';
+import { keyboardConfig } from './config/keyboard.config';
 import getCurrentLang from './helpers/getCurrentLang';
 import { focusTextarea, blurTextarea } from './helpers/focusTexarea';
 import setCapsLock from './modules/setCapsLock';
 import reRenderKeyboard from './modules/reRenderKeyboard';
-import capslockIndicatorTemplate from './views/capslockIndicatorTemplate';
-import { onCapsLockIndicator, ofCapsLockIndicator } from './modules/toggleCapsLockIndicator';
+import capslockIndicatorTemplate from './UI/capslockIndicatorTemplate';
+import {
+  onCapsLockIndicator,
+  ofCapsLockIndicator,
+} from './modules/toggleCapsLockIndicator';
 import deleteSign from './modules/delete';
-import languageIndicatorTemplate from './views/languageIndicatorTemplate';
+import languageIndicatorTemplate from './UI/languageIndicatorTemplate';
 import getCaretPosition from './helpers/getCaretPosition';
 // import mouseClickHandler from './modules/mouseClickHandler';
 
 console.log('Hello!');
+
+/**
+ * Позиция курсора в поле textarea
+ * @var {Number}
+ */
+let cursorPosition = null;
+
 
 const body = document.querySelector('body');
 body.prepend(wrapper);
@@ -62,12 +72,22 @@ const mouseClickHandler = (event) => {
   // set language to keyboard from local storage
   lang = Number(localStorage.getItem('codeLang'));
   // get buttons value
-  let target = event.target.dataset.key;
   const targetElement = event.target;
   const dataKey = targetElement.dataset.key;
   const row = targetElement.classList.contains('row');
-  let currentLang = getCurrentLang();
   const indicatorCL = document.querySelector('#capslock-light');
+  /**
+   * @param {String} target value of virtual keyboard
+   */
+  let target = event.target.dataset.key;
+  let currentLang = getCurrentLang();
+
+  console.log('event.target', event.target.id);
+
+  // Get cursor position in textarea
+  if (event.target.id === 'textarea') {
+    cursorPosition = getCaretPosition(textarea);
+  }
 
   if (row) {
     target = '';
@@ -91,7 +111,12 @@ const mouseClickHandler = (event) => {
     setTimeout(() => {
       keyboard.remove();
       keyboard = keyboardTemplate();
-      renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
+      renderKeyboard(
+        keyboardConfig.shift,
+        currentLang,
+        keyboard,
+        keyboardConfig.capslock
+      );
       container.append(keyboard);
     }, keyboardConfig.specBtnTimeout);
   }
@@ -108,7 +133,12 @@ const mouseClickHandler = (event) => {
 
       keyboard.remove();
       keyboard = keyboardTemplate();
-      renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
+      renderKeyboard(
+        keyboardConfig.shift,
+        currentLang,
+        keyboard,
+        keyboardConfig.capslock
+      );
       container.append(keyboard);
 
       if (keyboardConfig.capslock === true) {
@@ -142,18 +172,25 @@ const mouseClickHandler = (event) => {
       //  change keyboard language layout
       keyboard.remove();
       keyboard = keyboardTemplate();
-      renderKeyboard(keyboardConfig.shift, currentLang, keyboard, keyboardConfig.capslock);
+      renderKeyboard(
+        keyboardConfig.shift,
+        currentLang,
+        keyboard,
+        keyboardConfig.capslock
+      );
       container.append(keyboard);
 
       // change language indicator
       const languageIndicator = document.querySelector('.language-indicator');
       languageIndicator.remove();
-      wrapper.insertAdjacentHTML('beforeend', languageIndicatorTemplate(currentLang));
+      wrapper.insertAdjacentHTML(
+        'beforeend',
+        languageIndicatorTemplate(currentLang)
+      );
     }, keyboardConfig.specBtnTimeout);
   }
-  // *
 
-  // * Set signs to Textarea
+  // * Set signs to Textarea * //
   if (target !== undefined) {
     // Remove old textarea
     document.querySelector('#textarea').remove();
@@ -163,10 +200,8 @@ const mouseClickHandler = (event) => {
     insertSignToTextarea(target, dataKey, textareaValue);
   }
 
-  // ! Delete signs from Textarea
-  // if (taget===) {
-
-  // }
+  // TODO: ! Delete signs from Textarea
+  deleteSign(cursorPosition, target);
 };
 
 // -- Events
@@ -195,7 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       keyboard.remove();
       keyboard = keyboardTemplate();
-      renderKeyboard(keyboardConfig.shift, 1, keyboard, keyboardConfig.capslock);
+      renderKeyboard(
+        keyboardConfig.shift,
+        1,
+        keyboard,
+        keyboardConfig.capslock
+      );
       container.append(keyboard);
     } else {
       keyboardConfig.currentLang = 'eng';
@@ -203,23 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       keyboard.remove();
       keyboard = keyboardTemplate();
-      renderKeyboard(keyboardConfig.shift, 0, keyboard, keyboardConfig.capslock);
+      renderKeyboard(
+        keyboardConfig.shift,
+        0,
+        keyboard,
+        keyboardConfig.capslock
+      );
       container.append(keyboard);
     }
   });
 
-  /**
-   * Позиция курсора в поле textarea
-   */
-  let cursorPosition = null;
-  // получаем позицию курсора в поле textarea
-  document.addEventListener('click', (event) => {
-    console.log('event', event);
-    if (event.target.getAttribute('id') === 'textarea') {
-      cursorPosition = getCaretPosition(textarea);
-    }
-  });
-  console.log('cursorPosition', cursorPosition);
+  // deleteSign(event,cursorPosition)
 
   // TODO: удаление клавишей DEL на виртуальной клавиатуре
   // body.addEventListener('keydown', deleteSign)

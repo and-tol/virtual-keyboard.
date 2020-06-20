@@ -1,5 +1,5 @@
 import { specialSigns } from '../config/keyboardSigns';
-import renderTextarea from '../views/renderTextarea';
+import renderTextarea from '../UI/renderTextarea';
 
 /**
  * Function that adds characters typed on the virtual keyboard with the mouse

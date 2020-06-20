@@ -1,0 +1,10 @@
+{
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 5000,
+  "editor.fontSize": 20,
+  "editor.tabSize": 2,
+  "terminal.integrated.cursorStyle": "underline",
+  "terminal.integrated.fontWeightBold": "500",
+  "terminal.integrated.letterSpacing": 1,
+  "terminal.integrated.shell.windows": ""
+}

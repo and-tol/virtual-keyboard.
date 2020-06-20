@@ -9,7 +9,7 @@ import {
   rowRusBtnsShiftCapslock,
   specialSigns,
 } from '../config/keyboardSigns';
-import capslockIndicatorTemplate from '../views/capslockIndicatorTemplate'
+import capslockIndicatorTemplate from '../UI/capslockIndicatorTemplate'
 
 /**
  * Function create row for keyboard

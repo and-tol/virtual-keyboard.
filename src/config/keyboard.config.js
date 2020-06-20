@@ -1,4 +1,4 @@
-const keyboardConfig = {
+export const keyboardConfig = {
   capslock: false,
   shift: false,
   alt: false,
@@ -12,4 +12,5 @@ const keyboardConfig = {
 // lang: 0 -> eng
 // lang: 1 -> rus
 
-export default keyboardConfig;
+// export default keyboardConfig;
+
